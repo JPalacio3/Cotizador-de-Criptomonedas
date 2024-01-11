@@ -1,6 +1,7 @@
 const criptoMonedasSelect = document.querySelector( '#criptomonedas' );
 const monedaSelect = document.querySelector( '#moneda' );
 const formulario = document.querySelector( '#formulario' );
+const resultado = document.querySelector( '#resultado' );
 
 // Objeto con la información del formulario
 const objBusqueda = {
@@ -42,6 +43,7 @@ function selectCriptomonedas( criptomonedas ) {
 }
 
 function leerValor( e ) {
+    e.preventDefault();
     objBusqueda[ e.target.name ] = e.target.value;
 }
 
@@ -61,7 +63,6 @@ function submitFormulario( e ) {
 }
 
 function mostrarAlerta( msg ) {
-
     const existeError = document.querySelector( '.error' );
     if ( !existeError ) {
         const divMensaje = document.createElement( 'DIV' );
@@ -91,5 +92,53 @@ function consultarApi() {
 }
 
 function mostrarCotizacionHTML( cotizacion ) {
-    console.log( cotizacion )
+
+    limpiarHTML();
+
+    // Extraer los datos del objeto que se obtiene como respuesta
+    const { PRICE, HIGHDAY, LOWHOUR, HIGHHOUR, LOWDAY, CHANGEPCT24HOUR, FROMSYMBOL, LASTUPDATE } = cotizacion;
+
+    const precio = document.createElement( 'P' );
+    precio.classList.add( 'precio' );
+    precio.innerHTML = `Precio : <span> ${PRICE}</span>`;
+
+    const precioAlto = document.createElement( 'P' );
+    precioAlto.innerHTML = ` Precio más alto del día : <span>  ${HIGHDAY}  </span> `;
+
+    const precioBajo = document.createElement( 'P' );
+    precioBajo.innerHTML = ` Precio más bajo del día: <span>  ${LOWDAY} </span> `;
+
+    const precioAltoHora = document.createElement( 'P' );
+    precioAltoHora.innerHTML = ` Precio más alto de la última hora: <span>  ${HIGHHOUR} </span> `;
+
+    const precioBajoHora = document.createElement( 'P' );
+    precioBajoHora.innerHTML = ` Precio más bajo de la última hora: <span>  ${LOWHOUR} </span> `;
+
+    const variacionHora = document.createElement( 'P' );
+    variacionHora.innerHTML = `Variación en las últimas 24 horas: <span> ${CHANGEPCT24HOUR} %</span> `;
+
+    const simbolo = document.createElement( 'P' );
+    simbolo.innerHTML = `Símbolo que lo representa: <span>  ${FROMSYMBOL} </span> `;
+
+    const actualizacion = document.createElement( 'P' );
+    actualizacion.innerHTML = `Última actualización: <span>  ${LASTUPDATE} </span> `;
+
+    // Imprimir en pantalla los resultados de la consulta
+    resultado.appendChild( precio );
+    resultado.appendChild( precioAlto );
+    resultado.appendChild( precioBajo );
+    resultado.appendChild( precioAltoHora );
+    resultado.appendChild( precioBajoHora );
+    resultado.appendChild( variacionHora );
+    resultado.appendChild( simbolo );
+    resultado.appendChild( actualizacion );
 }
+
+function limpiarHTML() {
+    while ( resultado.firstChild ) {
+        resultado.removeChild( resultado.firstChild );
+    }
+}
+
+
+
