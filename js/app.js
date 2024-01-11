@@ -57,7 +57,6 @@ function submitFormulario( e ) {
         mostrarAlerta( 'Error! - Ambos Campos Son Obligatorios' );
         return;
     }
-
     // Consultar la API con los resultados
     consultarApi();
 }
@@ -84,6 +83,10 @@ function consultarApi() {
     // Consulta a la API para obtener los valores de la moneda seleccionada en el formulario
     // const url = `https://min-api.cryptocompare.com/data/price?fsym=${criptomoneda}&tsyms=${moneda}`;
     const url = `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=${criptomoneda}&tsyms=${moneda}`;
+
+    // Mostrar el Spinner de carga mientras se realiza la consulta a la API
+    mostrarSpinner();
+
     fetch( url )
         .then( respuesta => respuesta.json() )
         .then( cotizacion => {
@@ -92,7 +95,6 @@ function consultarApi() {
 }
 
 function mostrarCotizacionHTML( cotizacion ) {
-
     limpiarHTML();
 
     // Extraer los datos del objeto que se obtiene como respuesta
@@ -132,6 +134,21 @@ function mostrarCotizacionHTML( cotizacion ) {
     resultado.appendChild( variacionHora );
     resultado.appendChild( simbolo );
     resultado.appendChild( actualizacion );
+}
+
+function mostrarSpinner() {
+    limpiarHTML();
+
+    const spinner = document.createElement( 'DIV' );
+    spinner.classList.add( 'spinner' );
+    spinner.innerHTML = `
+    <div class="spinner">
+        <div class="bounce1"></div>
+        <div class="bounce2"></div>
+        <div class="bounce3"></div>
+    </div>
+    `;
+    resultado.appendChild( spinner );
 }
 
 function limpiarHTML() {
